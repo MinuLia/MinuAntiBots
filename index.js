@@ -1,9 +1,10 @@
 const Discord = require('discord.js');
+const dotenv = require('dotenv');
+const {putMessage} = require("./helpers/messageManager.js");
 
-const {config} = require('./config');
+// Init .env file
+dotenv.config();
 
-// Events
-const {messageCreate} = require("./events/messageCreate.js");
 
 /*
 * Useful resources:
@@ -14,36 +15,24 @@ const {messageCreate} = require("./events/messageCreate.js");
 * */
 
 
-/*
-* TODO
-*
-* - Stock messages in the memory [index -> [user, created_at]]
-* - After each message, get last 10 messages (remove all others from memory as well), check the created_at timestamp. If less than 15s between last and 10th, then mute/ban user
-*
-* */
-
 const client = new Discord.Client({
     intents: [
-        "GUILDS",
-        "GUILD_MESSAGES",
-        "GUILD_MEMBERS"
+        Discord.Intents.FLAGS.GUILD_MESSAGES,
+        Discord.Intents.FLAGS.GUILDS,
+        Discord.Intents.FLAGS.GUILD_BANS,
+        Discord.Intents.FLAGS.GUILD_MEMBERS,
     ]
 });
 
 // When bot is ready
 client.on('ready', () => {
-    console.log('Bot Connected!');
+    console.log('MinuAntiBots Ready!');
 });
 
 
 // When a message is posted
-client.on('messageCreate', async message => {
-    // If no message
-    if (!config.listen.messageCreated) {
-        return;
-    }
-
-
+client.on('messageCreate', async (message) => {
+    await putMessage(client, message);
 });
 
 
