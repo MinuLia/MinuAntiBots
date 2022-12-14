@@ -1,3 +1,5 @@
+const { MessageEmbed } = require('discord.js');
+
 const messages = [];
 
 // Entrypoint
@@ -24,12 +26,19 @@ exports.putMessage = async (client, message) => {
             // Call flood method
             if (isFlooding(message.author.id)) {
                 const guildMember = await message.guild.members.cache.get(message.author.id);
+                const targetChannel = await message.guild.channels.cache.get(process.env.MAIN_CHANNEL || message.channel.id);
+                const username = message.author.username;
                 if (guildMember) {
                     await guildMember.ban({deleteMessageSeconds: 604800, reason: "Flooding (MinuAntiBots)"})
                         .then(async () => {
+                            // Delete user messages
                             const userMessages = (await message.channel.messages.fetch())
                                 .filter(m => m.author.id === message.author.id);
                             await message.channel.bulkDelete(userMessages);
+
+                            // Post embed message
+                            const embed = buildEmbedMessage(username);
+                            targetChannel.send({embeds: [embed]});
                         })
                         .catch(() => {});
                 }
@@ -56,4 +65,19 @@ const isFlooding = (user_id) => {
 
     // If 10 messages has been sent in 10 seconds by the same user, then mute him
     return message_latest.date_created - message_oldest.date_created <= 10000;
+}
+
+
+const buildEmbedMessage = (username) => {
+    return new MessageEmbed()
+        .setColor(0x03A9F4)
+        .setTitle('Sheeeeeeesh')
+        .setDescription(`Bye bye ${username || '(I don\'t even know your name bi***)'} 👋`)
+        .addFields(
+            {
+                name: 'Ban Reason',
+                value: 'Flood'
+            }
+        )
+        .setTimestamp();
 }
