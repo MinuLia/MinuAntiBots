@@ -1,6 +1,6 @@
 # MinuAntiBots
 Just a simple Discord Bot.
-Used to block flood on your server.
+Used to prevent flood on your server.
 
 ---
 ## Requirements
