@@ -29,7 +29,7 @@ exports.putMessage = async (client, message) => {
                 const targetChannel = await message.guild.channels.cache.get(process.env.MAIN_CHANNEL || message.channel.id);
                 const username = message.author.username;
                 if (guildMember) {
-                    await guildMember.ban({deleteMessageSeconds: 604800, reason: "Flooding (MinuAntiBots)"})
+                    await guildMember.kick({deleteMessageSeconds: 604800, reason: "Flooding (MinuAntiBots)"})
                         .then(async () => {
                             // Delete user messages
                             const userMessages = (await message.channel.messages.fetch())
@@ -75,7 +75,7 @@ const buildEmbedMessage = (username) => {
         .setDescription(`Bye bye ${username || '(I don\'t even know your name bi***)'} 👋`)
         .addFields(
             {
-                name: 'Ban Reason',
+                name: 'Kick Reason',
                 value: 'Flood'
             }
         )

@@ -20,8 +20,8 @@ If you want to print ban message in a specific channel, then get the ID of this 
 
     $ git clone https://github.com/minulia/minuantibots
     $ cd minuantibots
-    $ npm install
     $ cp .env.local .env
+    $ npm install
 
 ## Running the project
 
